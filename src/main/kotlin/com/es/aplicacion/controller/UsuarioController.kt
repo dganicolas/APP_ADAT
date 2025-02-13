@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -60,6 +61,11 @@ class UsuarioController {
         var token = tokenService.generarToken(authentication)
 
         return ResponseEntity(mapOf("token" to token), HttpStatus.CREATED)
+    }
+
+    @GetMapping("/")
+    fun mundoHola():String{
+        return "<h1>ADIOS MUNDO CRUEL</h1>"
     }
 
 }
