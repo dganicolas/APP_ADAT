@@ -28,7 +28,7 @@ class APIExceptionHandler {
     @ResponseBody
     fun handleNotFound(request: HttpServletRequest, e: Exception) : ErrorRespuesta {
         e.printStackTrace()
-        return ErrorRespuesta(e.message!!, request.requestURI)
+        return ErrorRespuesta(e.message?:"error", request.requestURI)
     }
 
 
