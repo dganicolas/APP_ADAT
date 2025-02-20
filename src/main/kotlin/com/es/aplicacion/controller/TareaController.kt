@@ -18,7 +18,7 @@ class TareaController {
     private lateinit var tareaService: TareaService
 
     @PostMapping("/crear")
-    fun crearTarea(authentication: Authentication, tarea: CreateTaskDto): ResponseEntity<String> {
+    fun crearTarea(authentication: Authentication,@RequestBody tarea: CreateTaskDto): ResponseEntity<String> {
         if (authentication.name == tarea.autor ||
             authentication.authorities.any { it.authority == "ROLE_ADMIN" }
         ) {
@@ -27,27 +27,44 @@ class TareaController {
         throw UnauthorizedException("no tiene autorizacion para esa accion")
     }
 
-    @PutMapping("/actualizar/{nombre}")
-    fun actualizarEstadoTarea(@PathVariable nombre:String,authentication: Authentication){
+    @PutMapping("/actualizarEstadoTarea/{nombre}")
+    fun actualizarEstadoTarea(@PathVariable nombre:String,authentication: Authentication): ResponseEntity<String> {
         if(nombre.isBlank()){
             throw BadRequestException("el nombre de la tarea debe estar presente")
         }
-        tareaService.actualizarTarea(authentication,nombre)
+        return tareaService.actualizarTarea(authentication,nombre)
 
     }
 
-    @GetMapping("/vertodo")
+    @GetMapping("/listarTodasLasTareas")
     fun listarTodasLasTareas(): ResponseEntity<MutableList<Tarea>> {
         return tareaService.listarTareas()
     }
 
-    @GetMapping("/autor/{nombre}")
+    @GetMapping("/listarTareasPorUsuarios/{nombre}")
     fun listarTareasPorAutor(@PathVariable nombre:String): ResponseEntity<List<Tarea>> {
         if(nombre.isBlank()){
             throw BadRequestException("el nombre de la tarea debe estar presente")
         }
         return tareaService.listarTareasPorAutor(nombre)
+    }
 
+    @DeleteMapping("/eliminar/{nombre}")
+    fun eliminartarea(@PathVariable nombre:String,authentication: Authentication): ResponseEntity<String> {
+        if(nombre.isBlank()){
+            throw BadRequestException("el nombre de la tarea debe estar presente")
+        }
+        return tareaService.eliminarTarea(nombre,authentication)
+    }
+
+    @PutMapping("/encargase/{nombre}/{encargado}")
+    fun encargarseDeLaTarea(@PathVariable nombre:String,
+                            @PathVariable encargado:String,
+                            authentication: Authentication): ResponseEntity<String> {
+        if(nombre.isBlank()){
+            throw BadRequestException("el nombre de la tarea debe estar presente")
+        }
+        return tareaService.encargarseDeLaTarea(nombre,encargado,authentication)
     }
 
     @PostMapping("/popularbbdd")

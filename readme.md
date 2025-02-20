@@ -41,16 +41,16 @@
   - /usuarios/registrarse
 - /usuarios/acceder
 - /usuarios/eliminarUsuario/{usuarioABorrrar}
-- /usuario/actualizarUsuario
+- /usuario/actualizarUsuario/{username}
 
 
 - coleccion: tareas
   - /tareas/crear 
   - /tareas/listarTodasLasTareas
   - /tareas/listarTareasPorUsuarios/{nombre}
-  - /tareas/actualizarEstadoTarea
-  - /tareas/eliminar/{tarea}
-  -  /tareas/encargarse/{tarea}
+  - /tareas/actualizarEstadoTarea/{nombre}
+  - /tareas/eliminar/{nombre}
+  -  /tareas/encargarse/{nombre}/{encargado}
 
 
 - b. Describir cada uno de los endpoints. Realiza una explicación sencilla de cada endpoint.
@@ -64,7 +64,7 @@
       - el usuario accedera mediante username y contraseña al sistema y este retornara un token si es valido o un 401 unauthorized
     - /usuarios/eliminarUsuario/{usuarioABorrrar}
       - el mismo usuario o admin podra borrar usuario existente(si no es admin se borrara el mismo)
-    - /usuario/actualizarUsuario
+    - /usuario/actualizarUsuario/{username}
       - el mismo usuario o admin puede editar los usuarios(si no es admin solo puede editarse el mismo)
    
  
@@ -75,18 +75,18 @@
       - listara todas las tareas que esten activas o no completadas
     - /tareas/listarTareasPorUsuarios/{nombre}
       - lista todas las tareas que haya creado ese usuario
-    - /tareas/actualizarEstadoTarea
+    - /tareas/actualizarEstadoTarea/{nombre}
       - cambiara el estado de la tarea por "pendiente" a "realizada" o viceversa
     - /tareas/eliminar/{tarea}
       - solo los admin pueden eliminar las tareas vigentes o realizadas o el propio autor
-    - /tareas/encargarse/{tarea}
+    - /tareas/encargarse/{nombre}/{encargado}
       - el propio usuario pueden encargarse de esa tarea o el admin poner quien se encarga 
 
 
 - c. Describe la lógica de negocio que va a contener tu aplicación.
   - los nombre de usuarios deben de tener minimo 3 letras o mas y un maximo de 12 letras
   - Los nombres de usuarios, son unico y no repetible
-  - Los nombre de tareas debe de ser unicos, y son nombre de tarea-3 letras de autor
+  - Los nombre de tareas debe de ser unicos
   - solos los admin pueden borrar todo tipo de tareas
   - los usuarios que no son admin no pueden poner como autor a otros usuarios
   - los usuarios se pueden encargar de la tarea

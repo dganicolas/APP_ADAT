@@ -1,5 +1,6 @@
 package com.es.aplicacion.service
 
+import com.es.aplicacion.dto.UsuarioActualizarDto
 import com.es.aplicacion.dto.UsuarioDTO
 import com.es.aplicacion.dto.UsuarioRegisterDTO
 import com.es.aplicacion.error.exception.BadRequestException
@@ -60,7 +61,7 @@ class UsuarioService : UserDetailsService {
         }
         val Provincias = apiService.obtenerDatosDesdeApi()
         val provinciaEscogida = Provincias?.data?.stream()?.filter {
-            it.PRO == usuarioInsertadoDTO.direccion.provincia
+            it.PRO == usuarioInsertadoDTO.direccion.provincia.uppercase()
         }?.findFirst()?.orElseThrow {
             NotFoundException("Provincia")
         }
@@ -96,21 +97,11 @@ class UsuarioService : UserDetailsService {
 
     }
 
-    fun actualizarUsuario(username: String, nuevoUsuario: Usuario): ResponseEntity<String> {
+    fun actualizarUsuario(username: String, nuevoUsuario: UsuarioActualizarDto): ResponseEntity<String> {
         val usuario = usuarioRepository.findByUsername(username).getOrNull()
         if (usuario != null) {
-            if (usuario.username != nuevoUsuario.username) {
-                throw BadRequestException("No se puede cambiar el username de la cuenta")
-            }
             usuario.email = nuevoUsuario.email
-            usuario.password = nuevoUsuario.password
-            usuario.direccion = usuario.direccion
-            val Provincias = apiService.obtenerDatosDesdeApi()
-            val provinciaEscogida = Provincias?.data?.stream()?.filter {
-                it.PRO == usuario.direccion.provincia
-            }?.findFirst()?.orElseThrow {
-                NotFoundException("la provincia no existe")
-            }
+            usuario.password = passwordEncoder.encode(nuevoUsuario.password)
             usuarioRepository.save(usuario)
             return ResponseEntity.ok("Usuario $username actualizado correctamente")
         } else {
@@ -127,6 +118,9 @@ class UsuarioService : UserDetailsService {
     }
 
     fun popularBaseDeDatos(): ResponseEntity<String> {
+        if (usuarioRepository.findByUsername("usuario1").isPresent){
+            throw BadRequestException(" base de datos ya poblada")
+        }
         val usuario1 = Usuario(
             _id = null,
             username = "usuario1",

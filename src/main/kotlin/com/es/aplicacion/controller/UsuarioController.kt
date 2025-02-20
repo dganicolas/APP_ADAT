@@ -1,6 +1,7 @@
 package com.es.aplicacion.controller
 
 import com.es.aplicacion.dto.LoginUsuarioDTO
+import com.es.aplicacion.dto.UsuarioActualizarDto
 import com.es.aplicacion.dto.UsuarioDTO
 import com.es.aplicacion.dto.UsuarioRegisterDTO
 import com.es.aplicacion.error.exception.UnauthorizedException
@@ -28,7 +29,7 @@ class UsuarioController {
     @Autowired
     private lateinit var usuarioService: UsuarioService
 
-    @PostMapping("/register")
+    @PostMapping("/registrarse")
     fun insert(
         httpRequest: HttpServletRequest,
         @RequestBody usuarioRegisterDTO: UsuarioRegisterDTO
@@ -43,7 +44,7 @@ class UsuarioController {
 
     }
 
-    @PostMapping("/login")
+    @PostMapping("/acceder")
     fun login(@RequestBody usuario: LoginUsuarioDTO) : ResponseEntity<Any>? {
 
         val authentication: Authentication
@@ -60,17 +61,17 @@ class UsuarioController {
         return ResponseEntity(mapOf("token" to token), HttpStatus.CREATED)
     }
 
-    @DeleteMapping("/eliminar/{username}")
-    fun eliminarUsuario(@PathVariable username:String, authentication: Authentication): ResponseEntity<String> {
-        if(username == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
-            return usuarioService.eliminarUsuario(username)
+    @DeleteMapping("/eliminarUsuario/{usuarioABorrrar}")
+    fun eliminarUsuario(@PathVariable usuarioABorrrar:String, authentication: Authentication): ResponseEntity<String> {
+        if(usuarioABorrrar == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
+            return usuarioService.eliminarUsuario(usuarioABorrrar)
         }else{
             throw UnauthorizedException("No tienes autorizacion de eliminar a otros usuarios")
         }
     }
 
-    @PutMapping("/actualizar/{username}")
-    fun actualizarUsuario(@PathVariable username:String, authentication: Authentication, nuevoUsuario: Usuario): ResponseEntity<String> {
+    @PutMapping("/actualizarUsuario/{username}")
+    fun actualizarUsuario(@PathVariable username:String, authentication: Authentication,@RequestBody nuevoUsuario: UsuarioActualizarDto): ResponseEntity<String> {
         if(username == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
             return usuarioService.actualizarUsuario(username,nuevoUsuario)
         }else{
