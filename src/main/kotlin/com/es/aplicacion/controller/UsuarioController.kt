@@ -4,6 +4,7 @@ import com.es.aplicacion.dto.LoginUsuarioDTO
 import com.es.aplicacion.dto.UsuarioDTO
 import com.es.aplicacion.dto.UsuarioRegisterDTO
 import com.es.aplicacion.error.exception.UnauthorizedException
+import com.es.aplicacion.model.Usuario
 import com.es.aplicacion.service.TokenService
 import com.es.aplicacion.service.UsuarioService
 import jakarta.servlet.http.HttpServletRequest
@@ -14,11 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/usuarios")
@@ -63,9 +60,32 @@ class UsuarioController {
         return ResponseEntity(mapOf("token" to token), HttpStatus.CREATED)
     }
 
-    @GetMapping("/")
-    fun mundoHola():String{
-        return "<h1>ADIOS MUNDO CRUEL</h1>"
+    @DeleteMapping("/eliminar/{username}")
+    fun eliminarUsuario(@PathVariable username:String, authentication: Authentication): ResponseEntity<String> {
+        if(username == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
+            return usuarioService.eliminarUsuario(username)
+        }else{
+            throw UnauthorizedException("No tienes autorizacion de eliminar a otros usuarios")
+        }
+    }
+
+    @PutMapping("/actualizar/{username}")
+    fun actualizarUsuario(@PathVariable username:String, authentication: Authentication, nuevoUsuario: Usuario): ResponseEntity<String> {
+        if(username == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
+            return usuarioService.actualizarUsuario(username,nuevoUsuario)
+        }else{
+            throw UnauthorizedException("No tienes autorizacion de eliminar a otros usuarios")
+        }
+    }
+
+    @GetMapping("/listarusuarios")
+    fun listarUsuarios(): ResponseEntity<MutableList<Usuario>> {
+        return usuarioService.listarUsuarios()
+    }
+
+    @PostMapping("/popularbbdd")
+    fun popularBaseDeDatos(): ResponseEntity<String> {
+        return usuarioService.popularBaseDeDatos()
     }
 
 }

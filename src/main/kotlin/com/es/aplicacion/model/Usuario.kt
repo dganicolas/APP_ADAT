@@ -9,12 +9,8 @@ data class Usuario(
     @BsonId
     val _id : String?,
     val username: String,
-    val password: String,
-    val email: String,
+    var password: String,
+    var email: String,
     val roles: String = "USER",
-    val direccion: Direccion
-) {
-
-
-
-}
+    var direccion: Direccion
+)

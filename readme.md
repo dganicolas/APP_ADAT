@@ -84,10 +84,27 @@
 
 
 - c. Describe la lógica de negocio que va a contener tu aplicación.
+  - los nombre de usuarios deben de tener minimo 3 letras o mas y un maximo de 12 letras
+  - Los nombres de usuarios, son unico y no repetible
+  - Los nombre de tareas debe de ser unicos, y son nombre de tarea-3 letras de autor
   - solos los admin pueden borrar todo tipo de tareas
   - los usuarios que no son admin no pueden poner como autor a otros usuarios
   - los usuarios se pueden encargar de la tarea
-  - 
-- d. Describe las excepciones que vas a generar y los códigos de estado que vas a poner en todos los casos.
+  - los admin pueden poner de encargado a cualquier usuario
+  - las tareas no completadas pueden cambiar de encargado
+  - las tareas completadas son inmutables
 
-- e. Describe las restricciones de seguridad que vas a aplicardentro de tu API REST
+
+- d. Describe las excepciones que vas a generar y los códigos de estado que vas a poner en todos los casos.
+  - 400 Bad request: El cliente me envia mal los datos en el cuerpo de la peticion
+  - 401 Unauthorized: El cliente no es admin e intenta hacer tareas de admin 
+  - 403 forbidden: el usuarios que no es admin esta intentando ver todos los usuarios que estan conectados o registrados 
+  - 404 not found: el usuario intenta acceder a una tarea que no existe
+
+
+- e. Describe las restricciones de seguridad que vas a aplicar dentro de tu API REST
+  - solo los usuarios autenticados pueden crear tareas 
+  - los admin pueden ver todos los usuarios que estan registrados en la aplicacion
+  - los usuarios solo pueden editar sus propias tareas
+  - los usuarios no admin solo podran encargarse ellos mismo de las tares y no poner a otros encargados
+  - los usuarios no autenticados solo podran logearse o registrarse
