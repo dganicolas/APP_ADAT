@@ -9,6 +9,7 @@ import com.es.aplicacion.error.exception.UnauthorizedException
 import com.es.aplicacion.model.Direccion
 import com.es.aplicacion.model.Usuario
 import com.es.aplicacion.repository.UsuarioRepository
+import org.intellij.lang.annotations.Pattern
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.User
@@ -44,6 +45,11 @@ class UsuarioService : UserDetailsService {
             .build()
     }
 
+    fun esEmailValido(email: String): Boolean {
+        val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-z]{2,}$")
+        return emailRegex.matches(email)
+    }
+
     fun insertUser(usuarioInsertadoDTO: UsuarioRegisterDTO): UsuarioDTO? {
 
         if (usuarioInsertadoDTO.username.length > 12 || usuarioInsertadoDTO.username.length < 3) {
@@ -56,6 +62,11 @@ class UsuarioService : UserDetailsService {
         if (usuarioInsertadoDTO.rol != null && usuarioInsertadoDTO.rol != "USER" && usuarioInsertadoDTO.rol != "ADMIN") {
             throw BadRequestException("El usuario tiene un rol desconocido")
         }
+
+        if(!esEmailValido(usuarioInsertadoDTO.email)){
+            throw BadRequestException("el email es invalido")
+        }
+
         if (usuarioRepository.findByUsername(usuarioInsertadoDTO.username).isPresent) {
             throw BadRequestException("username ya esta registrado en la base de datos")
         }
