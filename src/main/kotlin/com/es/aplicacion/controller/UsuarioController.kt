@@ -33,7 +33,7 @@ class UsuarioController {
     fun insert(
         httpRequest: HttpServletRequest,
         @RequestBody usuarioRegisterDTO: UsuarioRegisterDTO
-    ) : ResponseEntity<UsuarioDTO>?{
+    ) : ResponseEntity<UsuarioDTO>{
 
         if(usuarioRegisterDTO.username.isBlank() && usuarioRegisterDTO.password.isBlank()){
             throw UnauthorizedException("los campos usuarios y contraseñas deben de estar rellenos")
