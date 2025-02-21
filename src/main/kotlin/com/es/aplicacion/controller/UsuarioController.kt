@@ -45,7 +45,7 @@ class UsuarioController {
     }
 
     @PostMapping("/acceder")
-    fun login(@RequestBody usuario: LoginUsuarioDTO) : ResponseEntity<Any>? {
+    fun login(@RequestBody usuario: LoginUsuarioDTO): ResponseEntity<Map<String, String>> {
 
         val authentication: Authentication
         try {
