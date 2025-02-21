@@ -108,3 +108,57 @@
   - los usuarios solo pueden editar sus propias tareas
   - los usuarios no admin solo podran encargarse ellos mismo de las tares y no poner a otros encargados
   - los usuarios no autenticados solo podran logearse o registrarse
+
+#  PRUEBAS GESTIÓN USUARIOS
+
+### Configura tu app para que se conecte a una base de datos MongoDB.
+- codigo que de mi app esta bien conectada a mongo
+- se encarga de creear una instancia de una consulta a nuestra api
+```kotlin
+object RetrofitClient {
+    private const val BASE_URL = "https://app-adat-9a4d.onrender.com/"
+    
+    val instance: ApiService by lazy {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        retrofit.create(ApiService::class.java)
+    }
+}
+```
+- endpoints que tratamos en la parte cliente
+- aqui configuramos a retrofit con los diferentes endpoints de mi api
+```kotlin
+interface ApiService {
+  @POST("usuarios/registrarse")
+  suspend fun registrarUsuario(@Body usuario: UsuarioRegisterDTO): Response<UsuarioDTO?>
+
+  @POST("usuarios/acceder")
+  suspend fun loginUsuario(@Body usuario: LoginUsuarioDTO): Response<Map<String, String>>
+}
+```
+# Plantea y documenta varias pruebas que muestren el correcto funcionamiento de la API en estos escenarios
+# caso del register exitoso
+-bases de datos, render y app antes del inicio de login exitoso
+![img.png](src%2Fmain%2Fresources%2Fimg.png)
+- caso exitoso 1: el register se hace correctamente
+![img_1.png](src%2Fmain%2Fresources%2Fimg_1.png)
+
+# caso del register fallidos
+- caso fallido 1: nombre existente en la base de datos
+![img_2.png](src%2Fmain%2Fresources%2Fimg_2.png)
+- caso fallido 2: contraseñas distintas
+![img_3.png](src%2Fmain%2Fresources%2Fimg_3.png)
+- caso fallido 3: provincia no existe
+![img_4.png](src%2Fmain%2Fresources%2Fimg_4.png)
+- caso fallido 4: el email es invalido
+![img_5.png](src%2Fmain%2Fresources%2Fimg_5.png)
+
+# casos de login exitoso
+- caso exitoso 1: me devuelve el token
+![img_6.png](src%2Fmain%2Fresources%2Fimg_6.png)
+
+# casos de login fallido 
+- caso fallido 1: el usuario no existe en la BD
+![img_1.png](img_1.png)
