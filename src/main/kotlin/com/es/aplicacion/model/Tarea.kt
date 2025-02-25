@@ -20,5 +20,4 @@ data class Tarea(
     val descripcion:String,
     var estado:Boolean,
     val autor:String,
-    var encargado:String
 )

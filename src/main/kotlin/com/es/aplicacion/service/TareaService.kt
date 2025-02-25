@@ -44,8 +44,7 @@ class TareaService() {
                 nombre = tarea.nombre,
                 descripcion = tarea.descripcion,
                 estado = false,
-                autor = tarea.autor,
-                encargado = ""
+                autor = tarea.autor
             )
         )
         return ResponseEntity.ok("la tarea: ${tarea.nombre} ha sido creada")
@@ -56,9 +55,6 @@ class TareaService() {
         if (tarea == null) {
             throw NotFoundException("la tarea no existe")
         } else {
-            if(tarea.encargado ==""){
-                throw BadRequestException("latarea no se puede completar si no tiene encargado")
-            }
             if (!tarea.estado) {
                 tarea.estado = true
                 tareaRepository.save(tarea)
@@ -83,17 +79,6 @@ class TareaService() {
         return ResponseEntity.ok(lista)
     }
 
-    fun popularBaseDedatos(): ResponseEntity<String> {
-        if (tareaRepository.findByNombre("Tarea 1").isPresent) {
-            throw BadRequestException("bases de datos ya cargada con datos de pruebas")
-        }
-        val tarea1 = Tarea(null, "Tarea 1", "Descripción de tarea 1", false, "usuario1", "")
-        val tarea2 = Tarea(null, "Tarea 2", "Descripción de tarea 2", false, "usuario1", "")
-        val tarea3 = Tarea(null, "Tarea 3", "Descripción de tarea 3", false, "usuario1", "")
-        tareaRepository.saveAll(listOf(tarea1, tarea2, tarea3))
-        return ResponseEntity.ok("bases de datos poblada con la informacion")
-    }
-
     fun eliminarTarea(nombre: String, authentication: Authentication): ResponseEntity<String> {
         val tarea = tareaRepository.findByNombre(nombre).getOrNull() ?: throw NotFoundException("la tarea no existe")
         if (tarea.autor == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
@@ -103,16 +88,4 @@ class TareaService() {
         throw UnauthorizedException("no tiene autorizacion para borrar la tarea")
     }
 
-    fun encargarseDeLaTarea(nombre: String, encargado: String, authentication: Authentication): ResponseEntity<String> {
-        val tarea = tareaRepository.findByNombre(nombre).getOrNull() ?: throw NotFoundException("la tarea no existe")
-        if(usuarioRepository.findByUsername(encargado).isEmpty){
-            throw BadRequestException(" el username no existe")
-        }
-        if (encargado == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
-            tarea.encargado = encargado
-            tareaRepository.save(tarea)
-            return ResponseEntity.ok("la tarea ${tarea.nombre} se encarga ${tarea.encargado}")
-        }
-        throw UnauthorizedException("no tiene autorizacion para encargar la tarea a otro")
-    }
 }

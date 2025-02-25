@@ -22,6 +22,7 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class UsuarioService : UserDetailsService {
 
+
     @Autowired
     private lateinit var usuarioRepository: UsuarioRepository
 
@@ -63,7 +64,7 @@ class UsuarioService : UserDetailsService {
             throw BadRequestException("El usuario tiene un rol desconocido")
         }
 
-        if(!esEmailValido(usuarioInsertadoDTO.email)){
+        if (!esEmailValido(usuarioInsertadoDTO.email)) {
             throw BadRequestException("el email es invalido")
         }
 
@@ -120,16 +121,25 @@ class UsuarioService : UserDetailsService {
         }
     }
 
-    fun listarUsuarios(): ResponseEntity<MutableList<Usuario>> {
-        val listaUsuarios = usuarioRepository.findAll()
+    fun listarUsuarios(): ResponseEntity<List<UsuarioDTO>> {
+        val listaUsuarios = emptyList<UsuarioDTO>().toMutableList()
+        usuarioRepository.findAll().forEach {
+            listaUsuarios.add(
+                UsuarioDTO(
+                    username = it.username,
+                    email = it.email,
+                    rol = it.roles
+                )
+            )
+        }
         if (listaUsuarios.isEmpty()) {
             throw NotFoundException("no hay usuarios registrados")
         }
-        return ResponseEntity.ok(listaUsuarios)
+        return ResponseEntity.ok(listaUsuarios.toList())
     }
 
     fun popularBaseDeDatos(): ResponseEntity<String> {
-        if (usuarioRepository.findByUsername("usuario1").isPresent){
+        if (usuarioRepository.findByUsername("usuario1").isPresent) {
             throw BadRequestException(" base de datos ya poblada")
         }
         val usuario1 = Usuario(

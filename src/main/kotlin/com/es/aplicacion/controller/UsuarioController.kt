@@ -61,10 +61,10 @@ class UsuarioController {
         return ResponseEntity(mapOf("token" to token), HttpStatus.CREATED)
     }
 
-    @DeleteMapping("/eliminarUsuario/{usuarioABorrrar}")
-    fun eliminarUsuario(@PathVariable usuarioABorrrar:String, authentication: Authentication): ResponseEntity<String> {
-        if(usuarioABorrrar == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
-            return usuarioService.eliminarUsuario(usuarioABorrrar)
+    @DeleteMapping("/eliminarUsuario/{username}")
+    fun eliminarUsuario(@PathVariable username:String, authentication: Authentication): ResponseEntity<String> {
+        if(username == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
+            return usuarioService.eliminarUsuario(username)
         }else{
             throw UnauthorizedException("No tienes autorizacion de eliminar a otros usuarios")
         }
@@ -80,13 +80,9 @@ class UsuarioController {
     }
 
     @GetMapping("/listarusuarios")
-    fun listarUsuarios(): ResponseEntity<MutableList<Usuario>> {
+    fun listarUsuarios(): ResponseEntity<List<UsuarioDTO>> {
         return usuarioService.listarUsuarios()
     }
 
-    @PostMapping("/popularbbdd")
-    fun popularBaseDeDatos(): ResponseEntity<String> {
-        return usuarioService.popularBaseDeDatos()
-    }
 
 }

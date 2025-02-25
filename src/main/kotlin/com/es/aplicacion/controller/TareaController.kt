@@ -14,6 +14,14 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/tareas")
 class TareaController {
 
+    ////Usuario con rol USER
+    //    //Ver todas SUS tareas V
+    //    //Marcar como hecha una tarea propia
+    //    //Eliminar una tarea propia
+    //    //Darse de alta A SÍ MISMO una tarea
+    //    //  Esto quiere decir que si otro usuario, que no es ADMIN,
+    //    //  intenta darle de alta una tarea a otro usuario debería
+    //    //  salir una excepción 403 Forbidden
     @Autowired
     private lateinit var tareaService: TareaService
 
@@ -42,11 +50,8 @@ class TareaController {
     }
 
     @GetMapping("/listarTareasPorUsuarios/{nombre}")
-    fun listarTareasPorAutor(@PathVariable nombre:String): ResponseEntity<List<Tarea>> {
-        if(nombre.isBlank()){
-            throw BadRequestException("el nombre de la tarea debe estar presente")
-        }
-        return tareaService.listarTareasPorAutor(nombre)
+    fun listarTareasPorAutor(authentication: Authentication): ResponseEntity<List<Tarea>>{
+        return tareaService.listarTareasPorAutor(authentication.name)
     }
 
     @DeleteMapping("/eliminar/{nombre}")
@@ -57,18 +62,4 @@ class TareaController {
         return tareaService.eliminarTarea(nombre,authentication)
     }
 
-    @PutMapping("/encargase/{nombre}/{encargado}")
-    fun encargarseDeLaTarea(@PathVariable nombre:String,
-                            @PathVariable encargado:String,
-                            authentication: Authentication): ResponseEntity<String> {
-        if(nombre.isBlank()){
-            throw BadRequestException("el nombre de la tarea debe estar presente")
-        }
-        return tareaService.encargarseDeLaTarea(nombre,encargado,authentication)
-    }
-
-    @PostMapping("/popularbbdd")
-    fun popularBaseDeDatos(): ResponseEntity<String> {
-        return tareaService.popularBaseDedatos()
-    }
 }
