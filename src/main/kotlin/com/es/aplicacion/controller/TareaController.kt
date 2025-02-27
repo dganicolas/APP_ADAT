@@ -50,8 +50,8 @@ class TareaController {
     }
 
     @GetMapping("/listarTareasPorUsuarios/{nombre}")
-    fun listarTareasPorAutor(authentication: Authentication): ResponseEntity<List<Tarea>>{
-        return tareaService.listarTareasPorAutor(authentication.name)
+    fun listarTareasPorAutor(@PathVariable nombre:String,authentication: Authentication): ResponseEntity<List<Tarea>>{
+        return tareaService.listarTareasPorAutor(nombre,authentication)
     }
 
     @DeleteMapping("/eliminar/{nombre}")

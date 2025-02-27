@@ -162,3 +162,108 @@ interface ApiService {
 # casos de login fallido 
 - caso fallido 1: el usuario no existe en la BD
 ![img_1.png](img_1.png)
+
+# PRUEBAS GESTIÓN TAREAS
+
+# Usuario con rol USER
+## Ver todas SUS tareas
+- /tareas/listarTareasPorUsuarios/{nombre}
+### casos de exito:
+- caso exito 1:
+- el usuario envia su token y lista las tareas suyas
+
+### casos fallido:
+- caso fallido 1:
+- el usuario envia su token e intenta ver tareas de otras personas
+- Marcar como hecha una tarea propia
+
+- caso fallido 2:
+- el usuario no envia el token
+
+## Eliminar una tarea propia
+- /tareas/eliminar/{nombre}
+### casos de exito:
+- caso de exito 1:
+- el usuario envia su token y elimina unas de sus propias tareas
+
+### casos fallidos:
+- caso fallido 1:
+- el usuario envia la uri del nombre de la tarea vacio
+
+- caso fallido 2: 
+- el usuario envia un nombre de tarea a eliminar que no existe
+
+- caso fallido 3:
+- el usuario intenta borrar la tarea de otra persona
+
+- caso fallido 4:
+- el usuario no envia el token 
+
+## Darse de alta A SÍ MISMO una tarea
+- /tareas/crear
+### caso de exito:
+- caso de exito 1:
+- el usuario se crea una tarea dirigida a el
+- imagen
+
+### caso fallido
+- caso fallido 1:
+- el usuario crea una tarea a otro usuario
+- imagen
+
+- caso fallido 2:
+- el usuario intenta crear una tarea sin proporcionar un nombre.
+- imagen
+
+- caso fallido 3:
+- el usuario intenta crear una tarea sin proporcionar una descripción.
+- imagen
+
+- caso fallido 4:
+- el usuario intenta crear una tarea con un autor que no existe en la base de datos.
+- imagen
+
+- caso fallido 5:
+- el usuario no envia el token
+- imagen
+
+# Usuario con rol ADMIN
+## Ver todas las tareas
+
+- /tareas/listarTodasLasTareas 
+
+### casos de exito:
+
+- caso de exito 1:
+- el usuario admin lista todas las tareas
+- imagen
+
+### casos fallido:
+
+- caso fallido 1:
+- un usuario NO admin accede a este endpoint
+- imagen
+
+## Eliminar cualquier tarea de cualquier usuario
+
+- /tareas/eliminar/{nombre}
+
+### casos de exito:
+
+- caso de exito 1:
+- el usuario ADMIN elimina cualquier tarea de cualquier usuario
+- imagen
+
+## Dar de alta tareas a cualquier usuario
+
+- /tareas/crear
+- 
+### casos de exito:
+
+- caso de exito 1:
+- el usuario ADMIN da de alta una tarea a el mismo
+- imagen
+
+- caso de exito 2:
+- el usuario ADMIN da de alta una tarea para otro usuario
+- imagen

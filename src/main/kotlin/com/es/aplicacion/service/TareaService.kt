@@ -28,10 +28,6 @@ class TareaService() {
             throw BadRequestException("el nombre de la tarea no puede estar vacio")
         }
 
-        if (tareaRepository.findByNombre(tarea.nombre).isPresent) {
-            throw BadRequestException("la tarea ya existe.")
-        }
-
         if (tarea.descripcion.isBlank()) {
             throw BadRequestException("la descripcion no puede estar vacio")
         }
@@ -74,9 +70,12 @@ class TareaService() {
         return ResponseEntity.ok(tareaRepository.findAll())
     }
 
-    fun listarTareasPorAutor(nombre: String): ResponseEntity<List<Tarea>> {
-        val lista = tareaRepository.findByAutor(nombre)
-        return ResponseEntity.ok(lista)
+    fun listarTareasPorAutor(nombreAbuscar: String, authentication: Authentication): ResponseEntity<List<Tarea>> {
+        if(nombreAbuscar == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
+            val lista = tareaRepository.findByAutor(nombreAbuscar)
+            return ResponseEntity.ok(lista)
+        }
+        throw UnauthorizedException("no tiene autorizacion para ver las tareas de otras personas")
     }
 
     fun eliminarTarea(nombre: String, authentication: Authentication): ResponseEntity<String> {
