@@ -1,6 +1,6 @@
 ## Índice
 - [primera parte 1](#--PRUEBAS-GESTIÓN-USUARIOS)
-- [segunda parte 2](#-PRUEBAS-GESTIÓN-TAREAS)
+- [segunda parte 2](# PRUEBAS GESTIÓN TAREAS)
 
 - a. Nombre del proyecto
 
