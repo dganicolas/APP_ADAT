@@ -1,6 +1,6 @@
 ## Índice
-- [primera parte 1](#--PRUEBAS-GESTIÓN-USUARIOS)
-- [segunda parte 2](# PRUEBAS GESTIÓN TAREAS)
+- [primera parte 1](#pruebas-gestión-usuarios)
+- [segunda parte 2](#pruebas-gestión-tareas)
 
 - a. Nombre del proyecto
 
@@ -167,7 +167,7 @@ interface ApiService {
 - caso fallido 1: el usuario no existe en la BD
 ![img_1.png](img_1.png)
 
-# PRUEBAS GESTIÓN TAREAS
+## PRUEBAS GESTIÓN TAREAS
 
 # Usuario con rol USER
 ## Ver todas SUS tareas
