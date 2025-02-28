@@ -1,6 +1,6 @@
 ## Índice
-# [primera parte 1](#pruebas-gestión-usuarios)
-# [segunda parte 2](#pruebas-gestión-tareas)
+# [pruebas-gestión-usuarios](#pruebas-gestión-usuarios)
+# [pruebas-gestión-tareas](#pruebas-gestión-tareas)
 
 - a. Nombre del proyecto
 
@@ -113,6 +113,12 @@
   - los usuarios no admin solo podran encargarse ellos mismo de las tares y no poner a otros encargados
   - los usuarios no autenticados solo podran logearse o registrarse
 
+
+
+<br><br><br>
+
+
+
 #  PRUEBAS GESTIÓN USUARIOS
 
 ### Configura tu app para que se conecte a una base de datos MongoDB.
@@ -166,6 +172,11 @@ interface ApiService {
 # casos de login fallido 
 - caso fallido 1: el usuario no existe en la BD
 ![img_1.png](img_1.png)
+
+
+
+<br><br><br><br><br>
+
 
 ## PRUEBAS GESTIÓN TAREAS
 
