@@ -1,6 +1,6 @@
 ## Índice
-- [primera parte 1](#pruebas-gestión-usuarios)
-- [segunda parte 2](#pruebas-gestión-tareas)
+# [primera parte 1](#pruebas-gestión-usuarios)
+# [segunda parte 2](#pruebas-gestión-tareas)
 
 - a. Nombre del proyecto
 
