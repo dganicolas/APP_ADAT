@@ -93,6 +93,9 @@ class TareaService() {
         if (usuarioRepository.findByUsername(tarea.autor).isEmpty) {
             throw BadRequestException("el autor no existe")
         }
+        if(tarea.descripcion.isEmpty()|| tarea.nombre.isEmpty()){
+            throw BadRequestException("campos incompletos")
+        }
         tareaExiste.nombre = tarea.nombre
         tareaExiste.estado = tarea.estado
         tareaExiste.descripcion =tarea.descripcion

@@ -53,7 +53,7 @@ class TareaController {
 
     @GetMapping("/tareaporid/{id}")
     fun tareaporid(@PathVariable id:String,authentication: Authentication): ResponseEntity<Tarea> {
-        print("el usuario ${authentication.name} ha creado una tarea")
+        print("el usuario ${authentication.name} ha  consultado una tarea")
         return tareaService.tenerTareaPorid(authentication,id)
     }
     @GetMapping("/listarTodasLasTareas")
