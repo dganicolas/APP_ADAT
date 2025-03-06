@@ -37,7 +37,7 @@ class TareaService() {
 
         tareaRepository.save(
             Tarea(
-                _id = null,
+                idTarea = null,
                 nombre = tarea.nombre,
                 descripcion = tarea.descripcion,
                 estado = false,
@@ -48,7 +48,7 @@ class TareaService() {
     }
 
     fun actualizarTarea(authentication: Authentication, id: String): ResponseEntity<String> {
-        val tarea = tareaRepository.findBy_id(id).getOrNull()
+        val tarea = tareaRepository.findById(id).getOrNull()
         if (tarea == null) {
             throw NotFoundException("la tarea no existe")
         } else {
@@ -78,7 +78,7 @@ class TareaService() {
     }
 
     fun eliminarTarea(id: String, authentication: Authentication): ResponseEntity<String> {
-        val tarea = tareaRepository.findBy_id(id).getOrNull() ?: throw NotFoundException("la tarea no existe")
+        val tarea = tareaRepository.findById(id).getOrNull() ?: throw NotFoundException("la tarea no existe")
         if (tarea.autor == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
             tareaRepository.delete(tarea)
             return ResponseEntity.ok("la tarea ${tarea.nombre} ha sido eliminada")
