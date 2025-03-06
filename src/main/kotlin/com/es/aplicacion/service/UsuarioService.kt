@@ -123,10 +123,13 @@ class UsuarioService : UserDetailsService {
     }
 
     fun actualizarUsuario(username: String, nuevoUsuario: UsuarioActualizarDto): ResponseEntity<Map<String,String>> {
+        //encuentro al usuario dentro de la db
         val usuario = usuarioRepository.findByUsername(username).getOrNull()
         if (usuario != null) {
+            //le actualizolos campos
             usuario.email = nuevoUsuario.email
             usuario.password = passwordEncoder.encode(nuevoUsuario.password)
+            //lo guardo y informo al usuario
             usuarioRepository.save(usuario)
             return ResponseEntity.ok(mapOf("mensaje" to "Usuario $username actualizado correctamente"))
         } else {
@@ -135,6 +138,7 @@ class UsuarioService : UserDetailsService {
     }
 
     fun listarUsuarios(): ResponseEntity<List<UsuarioDTO>> {
+        //listo todos los usuario de la base de datos pero sin mandar su contraseña
         val listaUsuarios = emptyList<UsuarioDTO>().toMutableList()
         usuarioRepository.findAll().forEach {
             listaUsuarios.add(
@@ -152,11 +156,13 @@ class UsuarioService : UserDetailsService {
     }
 
     fun esAdmin(authentication: Authentication): ResponseEntity<Boolean> {
+        //reviso si tiene rol de admin
         val esAdmin = authentication.authorities.any { it.authority == "ROLE_ADMIN" }
         return ResponseEntity.ok(esAdmin)
     }
 
     fun obtenerEmail(name: String?): ResponseEntity<Map<String, String>> {
+        //retorno su email
         val usuario=usuarioRepository.findByUsername(name!!).getOrNull()?:throw NotFoundException("usuario no encontrado")
         return ResponseEntity.ok(mapOf("mensaje" to usuario.email))
     }
