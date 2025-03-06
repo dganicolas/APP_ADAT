@@ -2,6 +2,41 @@
 # [pruebas usuarios](#pruebas-gestión-usuarios)
 # [pruebas tareas](#pruebas-gestión-tareas)
 
+---
+# entrega final 
+# ver esta parte solo 
+## arreglado bug menor que aparece en el video
+  ```kotlin
+fun actualizarTarea(tarea: Tarea, authentication: Authentication): ResponseEntity<Map<String, String>> {
+  var tareaExiste = tareaRepository.findBy_id(tarea._id ?: "").getOrNull()
+    ?: throw NotFoundException("la tarea no existe")
+
+  if (usuarioRepository.findByUsername(tarea.autor).isEmpty) {
+    throw BadRequestException("el autor no existe")
+  }
+//EN LA COMPROBACIONDEL VIDEO ME FALTO INYECTARTE ESTO
+  if (tarea.descripcion.isEmpty() || tarea.nombre.isEmpty()) {
+    throw BadRequestException("campos incompletos")
+  }
+
+  tareaExiste.nombre = tarea.nombre
+  tareaExiste.estado = tarea.estado
+  tareaExiste.descripcion = tarea.descripcion
+  tareaExiste.autor = tarea.autor
+  tareaRepository.save(tareaExiste)
+
+  return ResponseEntity.ok(mapOf("mensaje" to "la tarea ${tareaExiste.nombre} ha sido actualizada"))
+}
+```
+
+# video
+<iframe width="560" height="315" src="https://www.youtube.com/embed/au5XcstUipI?si=cWtVuyYsAFSqB_S4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+# en caso de que no puedas ver el video incustrado
+ - enlace: https://youtu.be/au5XcstUipI
+---
+# resto de las entregas, añadido nuevos endpoints
+
 - a. Nombre del proyecto
 
 
