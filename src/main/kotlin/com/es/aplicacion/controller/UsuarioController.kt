@@ -31,6 +31,7 @@ class UsuarioController {
 
     @PostMapping("/registrarse")
     fun insert(
+        httpRequest: HttpServletRequest,
         @RequestBody usuarioRegisterDTO: UsuarioRegisterDTO
     ) : ResponseEntity<UsuarioDTO>{
 
@@ -44,7 +45,7 @@ class UsuarioController {
     }
 
     @PostMapping("/acceder")
-    fun login(@RequestBody usuario: LoginUsuarioDTO): ResponseEntity<Map<String, String>> {
+    fun login(httpRequest: HttpServletRequest,@RequestBody usuario: LoginUsuarioDTO): ResponseEntity<Map<String, String>> {
 
         val authentication: Authentication
         try {
