@@ -25,9 +25,11 @@ class TareaController {
     @Autowired
     private lateinit var tareaService: TareaService
 
+    //endpoint que crea una tarea nuevaen la DB
     @PostMapping("/crear")
     fun crearTarea(authentication: Authentication,@RequestBody tarea: CreateTaskDto): ResponseEntity<CreateTaskDto> {
         print("el usuario ${authentication.name} ha creado una tarea")
+        //revisosi tiene los privilegios necesarios
         if (authentication.name == tarea.autor ||
             authentication.authorities.any { it.authority == "ROLE_ADMIN" }
         ) {

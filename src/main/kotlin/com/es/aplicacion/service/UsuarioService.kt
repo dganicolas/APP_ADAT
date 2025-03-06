@@ -48,38 +48,47 @@ class UsuarioService : UserDetailsService {
     }
 
     fun esEmailValido(email: String): Boolean {
+        //reviso si el email es valido
         val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-z]{2,}$")
         return emailRegex.matches(email)
     }
 
     fun insertUser(usuarioInsertadoDTO: UsuarioRegisterDTO): UsuarioDTO? {
-
+        //compruebo que el usuario no meta un nombre inferior a 3 y mayor a 12 de longitud
         if (usuarioInsertadoDTO.username.length > 12 || usuarioInsertadoDTO.username.length < 3) {
             throw BadRequestException(" el username debera tener 3 caracteres como minimo y 12 caracteres como maximo.")
         }
 
+        //compruebo que la contraseña coincida
         if (usuarioInsertadoDTO.passwordRepeat != usuarioInsertadoDTO.password) {
             throw BadRequestException("las contraseñas no son iguales")
         }
+
+        //compruebo que el rol este bien
         if (usuarioInsertadoDTO.rol != null && usuarioInsertadoDTO.rol != "USER" && usuarioInsertadoDTO.rol != "ADMIN") {
             throw BadRequestException("El usuario tiene un rol desconocido")
         }
 
+        //compruebo si el email es valido
         if (!esEmailValido(usuarioInsertadoDTO.email)) {
             throw BadRequestException("el email es invalido")
         }
 
+        //reviso que el username del usuario no exista
         if (usuarioRepository.findByUsername(usuarioInsertadoDTO.username).isPresent) {
             throw BadRequestException("username ya esta registrado en la base de datos")
         }
+        //compruebo si la provincia existe en la vida real
         val Provincias = apiService.obtenerDatosDesdeApi()
         val provinciaEscogida = Provincias?.data?.stream()?.filter {
             it.PRO == usuarioInsertadoDTO.direccion.provincia.uppercase()
         }?.findFirst()?.orElseThrow {
             NotFoundException("Provincia no encontrada")
         }
+        //hasheo la contraseña
         usuarioInsertadoDTO.password = passwordEncoder.encode(usuarioInsertadoDTO.password)
 
+        //creo el usuario en la DB
         usuarioRepository.insert(
             Usuario(
                 null,
@@ -91,6 +100,7 @@ class UsuarioService : UserDetailsService {
             )
         )
 
+        //retorno solo el nombre, email y rol al usuario
         return UsuarioDTO(
             usuarioInsertadoDTO.username,
             usuarioInsertadoDTO.email,
@@ -100,8 +110,10 @@ class UsuarioService : UserDetailsService {
     }
 
     fun eliminarUsuario(username: String): ResponseEntity<Map<String,String>> {
+        //consigo al usuarioen la db
         val usuario = usuarioRepository.findByUsername(username).getOrNull()
         if (usuario != null) {
+            //si existe lo elimino y retorno mensaje informativo
             usuarioRepository.delete(usuario)
             return ResponseEntity.ok(mapOf("mensaje" to "Usuario $username eliminado correctamente"))
         } else {
