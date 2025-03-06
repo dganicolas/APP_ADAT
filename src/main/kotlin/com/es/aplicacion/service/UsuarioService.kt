@@ -165,7 +165,7 @@ class UsuarioService : UserDetailsService {
     }
 
     fun esAdmin(authentication: Authentication): ResponseEntity<Boolean> {
-        val esAdmin = authentication.authorities.any { it.authority == "ADMIN" }
+        val esAdmin = authentication.authorities.any { it.authority == "ROLE_ADMIN" }
         return ResponseEntity.ok(esAdmin)
     }
 
