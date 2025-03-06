@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*
 
 @Repository
-interface TareaRepository : MongoRepository<Tarea, String> {
+interface TareaRepository : MongoRepository<Tarea, Long> {
 
     fun findBy_id(nombre: String) : Optional<Tarea>
     fun findByAutor(autor: String): List<Tarea>
