@@ -34,9 +34,12 @@ class TareaService() {
         if(usuarioRepository.findByUsername(tarea.autor).isEmpty){
             throw BadRequestException("el autor no existe")
         }
+        val maxId = tareaRepository.findAll().maxByOrNull { it._id ?: 0 }?._id ?: 0
+        val nuevoId = maxId + 1
+
         tareaRepository.save(
             Tarea(
-                _id = null,
+                _id = nuevoId,
                 nombre = tarea.nombre,
                 descripcion = tarea.descripcion,
                 estado = false,
@@ -46,8 +49,8 @@ class TareaService() {
         return ResponseEntity.ok("la tarea: ${tarea.nombre} ha sido creada")
     }
 
-    fun actualizarTarea(authentication: Authentication, nombre: String): ResponseEntity<String> {
-        val tarea = tareaRepository.findByNombre(nombre).getOrNull()
+    fun actualizarTarea(authentication: Authentication, id: String): ResponseEntity<String> {
+        val tarea = tareaRepository.findBy_id(id).getOrNull()
         if (tarea == null) {
             throw NotFoundException("la tarea no existe")
         } else {
@@ -66,20 +69,18 @@ class TareaService() {
         }
     }
 
-    fun listarTareas(): ResponseEntity<MutableList<Tarea>> {
-        return ResponseEntity.ok(tareaRepository.findAll())
-    }
-
-    fun listarTareasPorAutor(nombreAbuscar: String, authentication: Authentication): ResponseEntity<List<Tarea>> {
-        if(nombreAbuscar == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
-            val lista = tareaRepository.findByAutor(nombreAbuscar)
+    fun listarTareas(authentication: Authentication): ResponseEntity<MutableList<Tarea>> {
+        if(authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
+            return ResponseEntity.ok(tareaRepository.findAll())
+        }else{
+            val lista = tareaRepository.findByAutor(authentication.name).toMutableList()
             return ResponseEntity.ok(lista)
         }
-        throw UnauthorizedException("no tiene autorizacion para ver las tareas de otras personas")
+
     }
 
-    fun eliminarTarea(nombre: String, authentication: Authentication): ResponseEntity<String> {
-        val tarea = tareaRepository.findByNombre(nombre).getOrNull() ?: throw NotFoundException("la tarea no existe")
+    fun eliminarTarea(id: String, authentication: Authentication): ResponseEntity<String> {
+        val tarea = tareaRepository.findBy_id(id).getOrNull() ?: throw NotFoundException("la tarea no existe")
         if (tarea.autor == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
             tareaRepository.delete(tarea)
             return ResponseEntity.ok("la tarea ${tarea.nombre} ha sido eliminada")

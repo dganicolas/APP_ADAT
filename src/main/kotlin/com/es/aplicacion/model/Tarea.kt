@@ -15,7 +15,7 @@ import java.util.Date
 @Document("Tarea")
 data class Tarea(
     @BsonId
-    val _id:String?,
+    val _id:Long?,
     val nombre: String,
     val descripcion:String,
     var estado:Boolean,

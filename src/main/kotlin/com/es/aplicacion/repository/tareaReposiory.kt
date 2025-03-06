@@ -8,6 +8,6 @@ import java.util.*
 @Repository
 interface TareaRepository : MongoRepository<Tarea, String> {
 
-    fun findByNombre(nombre: String) : Optional<Tarea>
+    fun findBy_id(nombre: String) : Optional<Tarea>
     fun findByAutor(autor: String): List<Tarea>
 }

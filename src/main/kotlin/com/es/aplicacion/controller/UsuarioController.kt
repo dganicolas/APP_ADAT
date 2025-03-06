@@ -84,5 +84,9 @@ class UsuarioController {
         return usuarioService.listarUsuarios()
     }
 
+    @GetMapping("/esadmin")
+    fun esAdmin(authentication: Authentication): ResponseEntity<Boolean> {
+        return usuarioService.esAdmin(authentication)
+    }
 
 }

@@ -12,6 +12,7 @@ import com.es.aplicacion.repository.UsuarioRepository
 import org.intellij.lang.annotations.Pattern
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -162,4 +163,10 @@ class UsuarioService : UserDetailsService {
         usuarioRepository.save(usuario2)
         return ResponseEntity.ok("bases de datos poblada con la informacion")
     }
+
+    fun esAdmin(authentication: Authentication): ResponseEntity<Boolean> {
+        val esAdmin = authentication.authorities.any { it.authority == "ROLE_ADMIN" }
+        return ResponseEntity.ok(esAdmin)
+    }
+
 }

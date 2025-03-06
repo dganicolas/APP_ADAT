@@ -35,31 +35,26 @@ class TareaController {
         throw UnauthorizedException("no tiene autorizacion para esa accion")
     }
 
-    @PutMapping("/actualizarEstadoTarea/{nombre}")
-    fun actualizarEstadoTarea(@PathVariable nombre:String,authentication: Authentication): ResponseEntity<String> {
-        if(nombre.isBlank()){
-            throw BadRequestException("el nombre de la tarea debe estar presente")
+    @PutMapping("/actualizarEstadoTarea/{id}")
+    fun actualizarEstadoTarea(@PathVariable id:String,authentication: Authentication): ResponseEntity<String> {
+        if(id.isBlank()){
+            throw BadRequestException("el id de la tarea debe estar presente")
         }
-        return tareaService.actualizarTarea(authentication,nombre)
+        return tareaService.actualizarTarea(authentication,id)
 
     }
 
     @GetMapping("/listarTodasLasTareas")
-    fun listarTodasLasTareas(): ResponseEntity<MutableList<Tarea>> {
-        return tareaService.listarTareas()
+    fun listarTodasLasTareas(authentication: Authentication): ResponseEntity<MutableList<Tarea>> {
+        return tareaService.listarTareas(authentication)
     }
 
-    @GetMapping("/listarTareasPorUsuarios/{nombre}")
-    fun listarTareasPorAutor(@PathVariable nombre:String,authentication: Authentication): ResponseEntity<List<Tarea>>{
-        return tareaService.listarTareasPorAutor(nombre,authentication)
-    }
-
-    @DeleteMapping("/eliminar/{nombre}")
-    fun eliminartarea(@PathVariable nombre:String,authentication: Authentication): ResponseEntity<String> {
-        if(nombre.isBlank()){
-            throw BadRequestException("el nombre de la tarea debe estar presente")
+    @DeleteMapping("/eliminar/{id}")
+    fun eliminartarea(@PathVariable id:String,authentication: Authentication): ResponseEntity<String> {
+        if(id.isBlank()){
+            throw BadRequestException("el id de la tarea debe estar presente")
         }
-        return tareaService.eliminarTarea(nombre,authentication)
+        return tareaService.eliminarTarea(id,authentication)
     }
 
 }
