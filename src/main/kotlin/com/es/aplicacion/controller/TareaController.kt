@@ -26,7 +26,7 @@ class TareaController {
     private lateinit var tareaService: TareaService
 
     @PostMapping("/crear")
-    fun crearTarea(authentication: Authentication,@RequestBody tarea: CreateTaskDto): ResponseEntity<String> {
+    fun crearTarea(authentication: Authentication,@RequestBody tarea: CreateTaskDto): ResponseEntity<CreateTaskDto> {
         if (authentication.name == tarea.autor ||
             authentication.authorities.any { it.authority == "ROLE_ADMIN" }
         ) {
