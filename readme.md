@@ -30,10 +30,7 @@ fun actualizarTarea(tarea: Tarea, authentication: Authentication): ResponseEntit
 ```
 
 # video
-<a href="https://www.youtube.com/watch?v=au5XcstUipI" target="_blank">
-    <img src="https://img.youtube.com/vi/au5XcstUipI/0.jpg" alt="Título del video">
-</a>
-
+[![Título del video](https://img.youtube.com/vi/au5XcstUipI/0.jpg)](https://www.youtube.com/watch?v=au5XcstUipI)
 
 
 # en caso de que no puedas ver el video incustrado
