@@ -44,6 +44,10 @@ class TareaController {
 
     }
 
+    @GetMapping("/tareaporid/{id}")
+    fun tareaporid(@PathVariable id:String,authentication: Authentication){
+        tareaService.tenerTareaPorid(authentication,id)
+    }
     @GetMapping("/listarTodasLasTareas")
     fun listarTodasLasTareas(authentication: Authentication): ResponseEntity<MutableList<Tarea>> {
         return tareaService.listarTareas(authentication)

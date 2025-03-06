@@ -60,23 +60,31 @@ class TareaService() {
         }
     }
 
-    fun listarTareas(authentication: Authentication): ResponseEntity<MutableList<Tarea>> {
-        if (authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
-            return ResponseEntity.ok(tareaRepository.findAll())
-        } else {
-            val lista = tareaRepository.findByAutor(authentication.name).toMutableList()
-            return ResponseEntity.ok(lista)
+    fun tenerTareaPorid(authentication: Authentication, id: String): ResponseEntity<Tarea> {
+        val tarea = tareaRepository.findBy_id(id).getOrNull() ?: throw BadRequestException("tarea no existe")
+        if (authentication.authorities.any { it.authority == "ROLE_ADMIN" } || authentication.name == tarea.autor) {
+            return ResponseEntity.ok(tarea)
+        }else{
+            throw UnauthorizedException("no tiene autorizacion para borrar la tarea")
+        }
+    }
+        fun listarTareas(authentication: Authentication): ResponseEntity<MutableList<Tarea>> {
+            if (authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
+                return ResponseEntity.ok(tareaRepository.findAll())
+            } else {
+                val lista = tareaRepository.findByAutor(authentication.name).toMutableList()
+                return ResponseEntity.ok(lista)
+            }
+
+        }
+
+        fun eliminarTarea(id: String, authentication: Authentication): ResponseEntity<String> {
+            val tarea = tareaRepository.findBy_id(id).getOrNull() ?: throw NotFoundException("la tarea no existe")
+            if (tarea.autor == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
+                tareaRepository.delete(tarea)
+                return ResponseEntity.ok("la tarea ${tarea.nombre} ha sido eliminada")
+            }
+            throw UnauthorizedException("no tiene autorizacion para borrar la tarea")
         }
 
     }
-
-    fun eliminarTarea(id: String, authentication: Authentication): ResponseEntity<String> {
-        val tarea = tareaRepository.findBy_id(id).getOrNull() ?: throw NotFoundException("la tarea no existe")
-        if (tarea.autor == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
-            tareaRepository.delete(tarea)
-            return ResponseEntity.ok("la tarea ${tarea.nombre} ha sido eliminada")
-        }
-        throw UnauthorizedException("no tiene autorizacion para borrar la tarea")
-    }
-
-}
