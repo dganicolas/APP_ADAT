@@ -35,12 +35,16 @@ class TareaController {
         throw UnauthorizedException("no tiene autorizacion para esa accion")
     }
 
+    @PutMapping("/actualizartarea")
+    fun actualizarTarea(@RequestBody tarea:Tarea,authentication: Authentication): ResponseEntity<Map<String, String>> {
+        return tareaService.actualizarTarea(tarea,authentication)
+    }
     @PutMapping("/actualizarEstadoTarea/{id}")
     fun actualizarEstadoTarea(@PathVariable id:String,authentication: Authentication): ResponseEntity<Map<String,String>> {
         if(id.isBlank()){
             throw BadRequestException("el id de la tarea debe estar presente")
         }
-        return tareaService.actualizarTarea(authentication,id)
+        return tareaService.actualizarEstado(authentication,id)
 
     }
 

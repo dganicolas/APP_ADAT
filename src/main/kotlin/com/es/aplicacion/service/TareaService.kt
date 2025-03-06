@@ -46,7 +46,7 @@ class TareaService() {
         return ResponseEntity.ok(tarea)
     }
 
-    fun actualizarTarea(authentication: Authentication, id: String): ResponseEntity<Map<String,String>> {
+    fun actualizarEstado(authentication: Authentication, id: String): ResponseEntity<Map<String,String>> {
         val tarea = tareaRepository.findBy_id(id).getOrNull()
         if (tarea == null) {
             throw NotFoundException("la tarea no existe")
@@ -86,6 +86,16 @@ class TareaService() {
             return ResponseEntity.ok(mapOf("mensaje" to "la tarea ${tarea.nombre} ha sido eliminada"))
         }
         throw UnauthorizedException("no tiene autorizacion para borrar la tarea")
+    }
+
+    fun actualizarTarea(tarea: Tarea, authentication: Authentication): ResponseEntity<Map<String, String>> {
+        var tareaExiste = tareaRepository.findBy_id(tarea._id?:"").getOrNull() ?: throw NotFoundException("la tarea no existe")
+        tareaExiste.nombre = tarea.nombre
+        tareaExiste.estado = tarea.estado
+        tareaExiste.descripcion =tarea.descripcion
+        tareaExiste.autor =tarea.autor
+        tareaRepository.save(tareaExiste)
+        return ResponseEntity.ok(mapOf("mensaje" to "la tarea ${tareaExiste.nombre} ha sido actualizada"))
     }
 
 }
