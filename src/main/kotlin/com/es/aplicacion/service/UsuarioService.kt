@@ -76,7 +76,7 @@ class UsuarioService : UserDetailsService {
         val provinciaEscogida = Provincias?.data?.stream()?.filter {
             it.PRO == usuarioInsertadoDTO.direccion.provincia.uppercase()
         }?.findFirst()?.orElseThrow {
-            NotFoundException("Provincia")
+            NotFoundException("Provincia no encontrada")
         }
         usuarioInsertadoDTO.password = passwordEncoder.encode(usuarioInsertadoDTO.password)
 

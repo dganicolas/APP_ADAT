@@ -34,7 +34,7 @@ class UsuarioController {
         httpRequest: HttpServletRequest,
         @RequestBody usuarioRegisterDTO: UsuarioRegisterDTO
     ) : ResponseEntity<UsuarioDTO>{
-
+        print("un usuario quiere registrarse en mi plataforma")
         if(usuarioRegisterDTO.username.isBlank() && usuarioRegisterDTO.password.isBlank()){
             throw UnauthorizedException("los campos usuarios y contraseñas deben de estar rellenos")
         }
@@ -45,12 +45,13 @@ class UsuarioController {
     }
     @GetMapping("/obteneremail")
     fun obtenerEmail(authentication: Authentication): ResponseEntity<Map<String, String>> {
+        print("un usuario quiere saber su email")
         return usuarioService.obtenerEmail(authentication.name)
     }
 
     @PostMapping("/acceder")
     fun login(httpRequest: HttpServletRequest,@RequestBody usuario: LoginUsuarioDTO): ResponseEntity<Map<String, String>> {
-
+        print("me intenta un usuario acceder a mi plataforma")
         val authentication: Authentication
         try {
             authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(usuario.username, usuario.password))
@@ -67,6 +68,7 @@ class UsuarioController {
 
     @DeleteMapping("/eliminarUsuario/{username}")
     fun eliminarUsuario(@PathVariable username:String, authentication: Authentication): ResponseEntity<Map<String,String>> {
+        print("un usuario se intenta eliminar de mi plataforma")
         if(username == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
             return usuarioService.eliminarUsuario(username)
         }else{
@@ -76,6 +78,7 @@ class UsuarioController {
 
     @PutMapping("/actualizarUsuario/{username}")
     fun actualizarUsuario(@PathVariable username:String, authentication: Authentication,@RequestBody nuevoUsuario: UsuarioActualizarDto): ResponseEntity<Map<String,String>> {
+        print("un usuario intenta acutualizar su contraseña o email")
         if(username == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
             return usuarioService.actualizarUsuario(username,nuevoUsuario)
         }else{
@@ -85,11 +88,13 @@ class UsuarioController {
 
     @GetMapping("/listarusuarios")
     fun listarUsuarios(): ResponseEntity<List<UsuarioDTO>> {
+        print("un usuario intenta listar todas las tareas")
         return usuarioService.listarUsuarios()
     }
 
     @GetMapping("/esadmin")
     fun esAdmin(authentication: Authentication): ResponseEntity<Boolean> {
+        print("un usuario quiere saber si es admin")
         return usuarioService.esAdmin(authentication)
     }
 

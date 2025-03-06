@@ -27,6 +27,7 @@ class TareaController {
 
     @PostMapping("/crear")
     fun crearTarea(authentication: Authentication,@RequestBody tarea: CreateTaskDto): ResponseEntity<CreateTaskDto> {
+        print("el usuario ${authentication.name} ha creado una tarea")
         if (authentication.name == tarea.autor ||
             authentication.authorities.any { it.authority == "ROLE_ADMIN" }
         ) {
@@ -37,10 +38,12 @@ class TareaController {
 
     @PutMapping("/actualizartarea")
     fun actualizarTarea(@RequestBody tarea:Tarea,authentication: Authentication): ResponseEntity<Map<String, String>> {
+        print("el usuario ${authentication.name} ha actualizado una tarea")
         return tareaService.actualizarTarea(tarea,authentication)
     }
     @PutMapping("/actualizarEstadoTarea/{id}")
     fun actualizarEstadoTarea(@PathVariable id:String,authentication: Authentication): ResponseEntity<Map<String,String>> {
+        print("el usuario ${authentication.name} ha actualizado el estado de una tarea")
         if(id.isBlank()){
             throw BadRequestException("el id de la tarea debe estar presente")
         }
@@ -50,15 +53,18 @@ class TareaController {
 
     @GetMapping("/tareaporid/{id}")
     fun tareaporid(@PathVariable id:String,authentication: Authentication): ResponseEntity<Tarea> {
+        print("el usuario ${authentication.name} ha creado una tarea")
         return tareaService.tenerTareaPorid(authentication,id)
     }
     @GetMapping("/listarTodasLasTareas")
     fun listarTodasLasTareas(authentication: Authentication): ResponseEntity<MutableList<Tarea>> {
+        print("el usuario ${authentication.name} ha listado todas sus tareas")
         return tareaService.listarTareas(authentication)
     }
 
     @DeleteMapping("/eliminar/{id}")
     fun eliminartarea(@PathVariable id:String,authentication: Authentication): ResponseEntity<Map<String,String>> {
+        print("el usuario ${authentication.name} ha eliminado una tarea")
         if(id.isBlank()){
             throw BadRequestException("el id de la tarea debe estar presente")
         }

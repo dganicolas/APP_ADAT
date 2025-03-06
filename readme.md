@@ -46,7 +46,8 @@
 - /usuarios/acceder
 - /usuarios/eliminarUsuario/{usuarioABorrrar}
 - /usuario/actualizarUsuario/{username}
-
+- /usuario/esadmin
+- /usuarios/obteneremail
 
 - coleccion: tareas
   - /tareas/crear 
@@ -70,21 +71,24 @@
       - el mismo usuario o admin podra borrar usuario existente(si no es admin se borrara el mismo)
     - /usuario/actualizarUsuario/{username}
       - el mismo usuario o admin puede editar los usuarios(si no es admin solo puede editarse el mismo)
-   
- 
-  - coleccion: tareas
-    - /tareas/crear
-      - se crearan nuevas tareas que se ligan a su nombre de usuario (creador de la tarea), si es admin el admin puede decidir quien crea la tarea
-    - /tareas/listarTodasLasTareas
-      - listara todas las tareas que esten activas o no completadas
-    - /tareas/listarTareasPorUsuarios/{nombre}
-      - lista todas las tareas que haya creado ese usuario
-    - /tareas/actualizarEstadoTarea/{nombre}
-      - cambiara el estado de la tarea por "pendiente" a "realizada" o viceversa
-    - /tareas/eliminar/{tarea}
-      - solo los admin pueden eliminar las tareas vigentes o realizadas o el propio autor
-    - /tareas/encargarse/{nombre}/{encargado}
-      - el propio usuario pueden encargarse de esa tarea o el admin poner quien se encarga 
+    - /usuario/esadmin
+      - miro si es administrador el usuario logeado
+    - /usuarios/obteneremail
+      - obtengo el email delusuario logeado
+
+    - coleccion: tareas
+      - /tareas/crear
+        - se crearan nuevas tareas que se ligan a su nombre de usuario (creador de la tarea), si es admin el admin puede decidir quien crea la tarea
+      - /tareas/listarTodasLasTareas
+        - listara todas las tareas que esten activas o no completadas
+      - /tareas/listarTareasPorUsuarios/{nombre}
+        - lista todas las tareas que haya creado ese usuario
+      - /tareas/actualizarEstadoTarea/{nombre}
+        - cambiara el estado de la tarea por "pendiente" a "realizada" o viceversa
+      - /tareas/eliminar/{tarea}
+        - solo los admin pueden eliminar las tareas vigentes o realizadas o el propio autor
+      - /tareas/encargarse/{nombre}/{encargado}
+        - el propio usuario pueden encargarse de esa tarea o el admin poner quien se encarga 
 
 
 - c. Describe la lógica de negocio que va a contener tu aplicación.
