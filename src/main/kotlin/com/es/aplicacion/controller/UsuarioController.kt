@@ -31,7 +31,6 @@ class UsuarioController {
 
     @PostMapping("/registrarse")
     fun insert(
-        httpRequest: HttpServletRequest,
         @RequestBody usuarioRegisterDTO: UsuarioRegisterDTO
     ) : ResponseEntity<UsuarioDTO>{
 
