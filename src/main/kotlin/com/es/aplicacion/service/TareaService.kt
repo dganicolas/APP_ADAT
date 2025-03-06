@@ -31,7 +31,7 @@ class TareaService() {
         if (tarea.descripcion.isBlank()) {
             throw BadRequestException("la descripcion no puede estar vacio")
         }
-        if(usuarioRepository.findByUsername(tarea.autor).isEmpty){
+        if (usuarioRepository.findByUsername(tarea.autor).isEmpty) {
             throw BadRequestException("el autor no existe")
         }
 
@@ -52,25 +52,19 @@ class TareaService() {
         if (tarea == null) {
             throw NotFoundException("la tarea no existe")
         } else {
-            if (!tarea.estado) {
-                tarea.estado = true
+            if (authentication.authorities.any { it.authority == "ROLE_ADMIN" } || authentication.name == tarea.autor) {
+                tarea.estado = !tarea.estado
                 tareaRepository.save(tarea)
-                return ResponseEntity.ok("tarea ${tarea.nombre} ha sido marcada como completa")
-            } else {
-                if (authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
-                    tarea.estado = false
-                    tareaRepository.save(tarea)
-                    return ResponseEntity.ok("tarea ${tarea.nombre} ha sido marcada como incompleta")
-                }
-                throw UnauthorizedException("no tiene autorizacion para desmarcar la tarea como completada")
+                return ResponseEntity.ok("tarea ${tarea.nombre} ha sido marcada como ${if (tarea.estado) "completada" else "incompleta"}")
             }
+            throw UnauthorizedException("no tiene autorizacion para desmarcar la tarea como completada")
         }
     }
 
     fun listarTareas(authentication: Authentication): ResponseEntity<MutableList<Tarea>> {
-        if(authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
+        if (authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
             return ResponseEntity.ok(tareaRepository.findAll())
-        }else{
+        } else {
             val lista = tareaRepository.findByAutor(authentication.name).toMutableList()
             return ResponseEntity.ok(lista)
         }
