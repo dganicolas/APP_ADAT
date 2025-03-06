@@ -34,12 +34,10 @@ class TareaService() {
         if(usuarioRepository.findByUsername(tarea.autor).isEmpty){
             throw BadRequestException("el autor no existe")
         }
-        val maxId = tareaRepository.findAll().maxByOrNull { it._id ?: 0 }?._id ?: 0
-        val nuevoId = maxId + 1
 
         tareaRepository.save(
             Tarea(
-                _id = nuevoId,
+                _id = null,
                 nombre = tarea.nombre,
                 descripcion = tarea.descripcion,
                 estado = false,

@@ -1,7 +1,6 @@
 package com.es.aplicacion.model
 
 import org.bson.codecs.pojo.annotations.BsonId
-import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.Date
@@ -17,7 +16,7 @@ import java.util.Date
 @Document("Tarea")
 data class Tarea(
     @Id
-    val _id: Long? = null,
+    val _id:Long?,
     val nombre: String,
     val descripcion:String,
     var estado:Boolean,
