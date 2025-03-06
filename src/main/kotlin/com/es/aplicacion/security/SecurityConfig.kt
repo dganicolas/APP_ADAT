@@ -36,10 +36,10 @@ class SecurityConfig {
         return http
             .csrf { csrf -> csrf.disable() } // Cross-Site Forgery
             .authorizeHttpRequests { auth -> auth
-                .requestMatchers("/usuarios/listarusuarios").hasRole("ROLE_ADMIN")
-                .requestMatchers("/tareas/listarTodasLasTareas").hasRole("ROLE_ADMIN")
-                .requestMatchers("/tareas/popularbbdd").hasRole("ROLE_ADMIN")
-                .requestMatchers("/usuarios/popularbbdd").hasRole("ROLE_ADMIN")
+                .requestMatchers("/usuarios/listarusuarios").hasRole("ADMIN")
+                .requestMatchers("/tareas/listarTodasLasTareas").hasRole("ADMIN")
+                .requestMatchers("/tareas/popularbbdd").hasRole("ADMIN")
+                .requestMatchers("/usuarios/popularbbdd").hasRole("ADMIN")
                 .requestMatchers("/usuarios/registrarse").permitAll()
                 .requestMatchers("/usuarios/acceder").permitAll()
                 .anyRequest().authenticated()
