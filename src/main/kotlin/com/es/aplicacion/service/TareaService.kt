@@ -46,7 +46,7 @@ class TareaService() {
         return ResponseEntity.ok(tarea)
     }
 
-    fun actualizarTarea(authentication: Authentication, id: String): ResponseEntity<String> {
+    fun actualizarTarea(authentication: Authentication, id: String): ResponseEntity<Map<String,String>> {
         val tarea = tareaRepository.findBy_id(id).getOrNull()
         if (tarea == null) {
             throw NotFoundException("la tarea no existe")
@@ -54,7 +54,7 @@ class TareaService() {
             if (authentication.authorities.any { it.authority == "ROLE_ADMIN" } || authentication.name == tarea.autor) {
                 tarea.estado = !tarea.estado
                 tareaRepository.save(tarea)
-                return ResponseEntity.ok("tarea ${tarea.nombre} ha sido marcada como ${if (tarea.estado) "completada" else "incompleta"}")
+                return ResponseEntity.ok(mapOf("mensaje" to "tarea ${tarea.nombre} ha sido marcada como ${if (tarea.estado) "completada" else "incompleta"}"))
             }
             throw UnauthorizedException("no tiene autorizacion para desmarcar la tarea como completada")
         }
@@ -79,11 +79,11 @@ class TareaService() {
 
     }
 
-    fun eliminarTarea(id: String, authentication: Authentication): ResponseEntity<String> {
+    fun eliminarTarea(id: String, authentication: Authentication): ResponseEntity<Map<String,String>> {
         val tarea = tareaRepository.findBy_id(id).getOrNull() ?: throw NotFoundException("la tarea no existe")
         if (tarea.autor == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }) {
             tareaRepository.delete(tarea)
-            return ResponseEntity.ok("la tarea ${tarea.nombre} ha sido eliminada")
+            return ResponseEntity.ok(mapOf("mensaje" to "la tarea ${tarea.nombre} ha sido eliminada"))
         }
         throw UnauthorizedException("no tiene autorizacion para borrar la tarea")
     }

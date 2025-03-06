@@ -62,7 +62,7 @@ class UsuarioController {
     }
 
     @DeleteMapping("/eliminarUsuario/{username}")
-    fun eliminarUsuario(@PathVariable username:String, authentication: Authentication): ResponseEntity<String> {
+    fun eliminarUsuario(@PathVariable username:String, authentication: Authentication): ResponseEntity<Map<String,String>> {
         if(username == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
             return usuarioService.eliminarUsuario(username)
         }else{
@@ -71,7 +71,7 @@ class UsuarioController {
     }
 
     @PutMapping("/actualizarUsuario/{username}")
-    fun actualizarUsuario(@PathVariable username:String, authentication: Authentication,@RequestBody nuevoUsuario: UsuarioActualizarDto): ResponseEntity<String> {
+    fun actualizarUsuario(@PathVariable username:String, authentication: Authentication,@RequestBody nuevoUsuario: UsuarioActualizarDto): ResponseEntity<Map<String,String>> {
         if(username == authentication.name || authentication.authorities.any { it.authority == "ROLE_ADMIN" }){
             return usuarioService.actualizarUsuario(username,nuevoUsuario)
         }else{

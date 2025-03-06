@@ -36,7 +36,7 @@ class TareaController {
     }
 
     @PutMapping("/actualizarEstadoTarea/{id}")
-    fun actualizarEstadoTarea(@PathVariable id:String,authentication: Authentication): ResponseEntity<String> {
+    fun actualizarEstadoTarea(@PathVariable id:String,authentication: Authentication): ResponseEntity<Map<String,String>> {
         if(id.isBlank()){
             throw BadRequestException("el id de la tarea debe estar presente")
         }
@@ -54,7 +54,7 @@ class TareaController {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    fun eliminartarea(@PathVariable id:String,authentication: Authentication): ResponseEntity<String> {
+    fun eliminartarea(@PathVariable id:String,authentication: Authentication): ResponseEntity<Map<String,String>> {
         if(id.isBlank()){
             throw BadRequestException("el id de la tarea debe estar presente")
         }

@@ -99,24 +99,24 @@ class UsuarioService : UserDetailsService {
 
     }
 
-    fun eliminarUsuario(username: String): ResponseEntity<String> {
+    fun eliminarUsuario(username: String): ResponseEntity<Map<String,String>> {
         val usuario = usuarioRepository.findByUsername(username).getOrNull()
         if (usuario != null) {
             usuarioRepository.delete(usuario)
-            return ResponseEntity.ok("Usuario $username eliminado correctamente")
+            return ResponseEntity.ok(mapOf("mensaje" to "Usuario $username eliminado correctamente"))
         } else {
             throw NotFoundException("El usuario no existe")
         }
 
     }
 
-    fun actualizarUsuario(username: String, nuevoUsuario: UsuarioActualizarDto): ResponseEntity<String> {
+    fun actualizarUsuario(username: String, nuevoUsuario: UsuarioActualizarDto): ResponseEntity<Map<String,String>> {
         val usuario = usuarioRepository.findByUsername(username).getOrNull()
         if (usuario != null) {
             usuario.email = nuevoUsuario.email
             usuario.password = passwordEncoder.encode(nuevoUsuario.password)
             usuarioRepository.save(usuario)
-            return ResponseEntity.ok("Usuario $username actualizado correctamente")
+            return ResponseEntity.ok(mapOf("mensaje" to "Usuario $username actualizado correctamente"))
         } else {
             throw NotFoundException("El usuario no existe")
         }
