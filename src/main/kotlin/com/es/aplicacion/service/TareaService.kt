@@ -90,6 +90,9 @@ class TareaService() {
 
     fun actualizarTarea(tarea: Tarea, authentication: Authentication): ResponseEntity<Map<String, String>> {
         var tareaExiste = tareaRepository.findBy_id(tarea._id?:"").getOrNull() ?: throw NotFoundException("la tarea no existe")
+        if (usuarioRepository.findByUsername(tarea.autor).isEmpty) {
+            throw BadRequestException("el autor no existe")
+        }
         tareaExiste.nombre = tarea.nombre
         tareaExiste.estado = tarea.estado
         tareaExiste.descripcion =tarea.descripcion

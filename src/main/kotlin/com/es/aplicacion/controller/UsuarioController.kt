@@ -43,6 +43,10 @@ class UsuarioController {
         return ResponseEntity(usuario, HttpStatus.CREATED)
 
     }
+    @GetMapping("/obteneremail")
+    fun obtenerEmail(authentication: Authentication): ResponseEntity<Map<String, String>> {
+        return usuarioService.obtenerEmail(authentication.name)
+    }
 
     @PostMapping("/acceder")
     fun login(httpRequest: HttpServletRequest,@RequestBody usuario: LoginUsuarioDTO): ResponseEntity<Map<String, String>> {

@@ -139,34 +139,14 @@ class UsuarioService : UserDetailsService {
         return ResponseEntity.ok(listaUsuarios.toList())
     }
 
-    fun popularBaseDeDatos(): ResponseEntity<String> {
-        if (usuarioRepository.findByUsername("usuario1").isPresent) {
-            throw BadRequestException(" base de datos ya poblada")
-        }
-        val usuario1 = Usuario(
-            _id = null,
-            username = "usuario1",
-            password = "password123",
-            email = "usuario1@example.com",
-            roles = "USER",
-            direccion = Direccion("Avenida Principal", "123", "28001", "Madrid", "Centro", "COMUNIDAD DE MADRID")
-        )
-        val usuario2 = Usuario(
-            _id = null,
-            username = "usuario2",
-            password = "password456",
-            email = "usuario2@example.com",
-            roles = "USER",
-            direccion = Direccion("Avenida Principal", "123", "28001", "Cataluña", "Centro", "Barcelona")
-        )
-        usuarioRepository.save(usuario1)
-        usuarioRepository.save(usuario2)
-        return ResponseEntity.ok("bases de datos poblada con la informacion")
-    }
-
     fun esAdmin(authentication: Authentication): ResponseEntity<Boolean> {
         val esAdmin = authentication.authorities.any { it.authority == "ROLE_ADMIN" }
         return ResponseEntity.ok(esAdmin)
+    }
+
+    fun obtenerEmail(name: String?): ResponseEntity<Map<String, String>> {
+        val usuario=usuarioRepository.findByUsername(name!!).getOrNull()?:throw NotFoundException("usuario no encontrado")
+        return ResponseEntity.ok(mapOf("mensaje" to usuario.email))
     }
 
 }
