@@ -37,7 +37,7 @@ class TareaService() {
 
         tareaRepository.save(
             Tarea(
-                idTarea = null,
+                idTarea = (tareaRepository.findAll().maxByOrNull { it.idTarea ?: 0 }?.idTarea?.plus(1)) ?: 0,
                 nombre = tarea.nombre,
                 descripcion = tarea.descripcion,
                 estado = false,

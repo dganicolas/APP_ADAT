@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document("Tarea")
 data class Tarea(
     @BsonId
-    val idTarea:Long?,
+    val idTarea:Long?=null,
     val nombre: String,
     val descripcion:String,
     var estado:Boolean,
