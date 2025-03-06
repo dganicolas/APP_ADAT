@@ -35,9 +35,11 @@ class TareaService() {
             throw BadRequestException("el autor no existe")
         }
 
+        val lastTarea = tareaRepository.findAll().maxByOrNull { it._id }
+        val nextId = (lastTarea?._id ?: 0) + 1 // Si no hay tareas, empieza en 1
         tareaRepository.save(
             Tarea(
-                _id = (tareaRepository.findAll().maxByOrNull { it._id ?: 0 }?._id?.plus(1)) ?: 0,
+                _id = nextId,
                 nombre = tarea.nombre,
                 descripcion = tarea.descripcion,
                 estado = false,
